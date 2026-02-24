@@ -20,6 +20,119 @@
             color: white;
         }
         
+        /* ANIMACIÓN DE ENTRADA */
+        .intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0f;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        
+        .intro-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .intro-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 72px;
+            font-weight: 900;
+            color: #ffc800;
+            text-transform: uppercase;
+            letter-spacing: 15px;
+            opacity: 0;
+            transform: scale(0.5);
+            animation: introPopIn 1s ease forwards 0.3s;
+        }
+        
+        .intro-logo::before, .intro-logo::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            left: 0;
+            background: linear-gradient(90deg, transparent, #ffc800, transparent);
+            opacity: 0;
+            animation: introLine 0.8s ease forwards 0.8s;
+        }
+        
+        .intro-logo::before { top: -20px; }
+        .intro-logo::after { bottom: -20px; }
+        
+        .intro-tagline {
+            font-size: 18px;
+            color: #00c8ff;
+            letter-spacing: 8px;
+            margin-top: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: introFadeUp 0.8s ease forwards 1.2s;
+        }
+        
+        .intro-loader {
+            width: 200px;
+            height: 3px;
+            background: rgba(255, 200, 0, 0.2);
+            margin-top: 40px;
+            border-radius: 3px;
+            overflow: hidden;
+            opacity: 0;
+            animation: introFadeIn 0.5s ease forwards 1.5s;
+        }
+        
+        .intro-loader-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #ffc800, #00c8ff);
+            border-radius: 3px;
+            animation: introLoad 2s ease forwards 1.5s;
+        }
+        
+        @keyframes introPopIn {
+            0% { opacity: 0; transform: scale(0.5); filter: blur(10px); }
+            70% { transform: scale(1.1); }
+            100% { opacity: 1; transform: scale(1); filter: blur(0); }
+        }
+        
+        @keyframes introLine {
+            0% { opacity: 0; transform: scaleX(0); }
+            100% { opacity: 1; transform: scaleX(1); }
+        }
+        
+        @keyframes introFadeUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes introFadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        
+        @keyframes introLoad {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        
+        .main-content {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .main-content.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
         .background {
             position: fixed;
             top: 0;
@@ -262,6 +375,7 @@
             position: relative;
         }
         
+        /* GLITCH AVANZADO */
         .title {
             font-family: 'Orbitron', sans-serif;
             font-size: 48px;
@@ -270,11 +384,64 @@
             text-transform: uppercase;
             letter-spacing: 8px;
             margin-bottom: 10px;
-            text-shadow: 0 0 10px #ffc800, 0 0 20px #ffc800, 0 0 40px #ffc800, 0 0 80px #ffc800;
             position: relative;
+            display: inline-block;
+            text-shadow: 0 0 10px #ffc800, 0 0 20px #ffc800, 0 0 40px #ffc800, 0 0 80px #ffc800;
         }
         
-        .title::before, .title::after {
+        .title::before,
+        .title::after {
+            content: 'LICEO RP';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0f;
+            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+        }
+        
+        .title::before {
+            left: 2px;
+            text-shadow: -3px 0 #ff00ff;
+            animation: glitch-anim-1 2.5s infinite linear alternate-reverse;
+            clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+        }
+        
+        .title::after {
+            left: -2px;
+            text-shadow: -3px 0 #00ffff;
+            animation: glitch-anim-2 2.5s infinite linear alternate-reverse;
+            clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+        }
+        
+        @keyframes glitch-anim-1 {
+            0% { clip: rect(20px, 9999px, 10px, 0); transform: translate(-2px, 0); }
+            20% { clip: rect(60px, 9999px, 50px, 0); transform: translate(2px, 0); }
+            40% { clip: rect(30px, 9999px, 20px, 0); transform: translate(-1px, 0); }
+            60% { clip: rect(80px, 9999px, 70px, 0); transform: translate(1px, 0); }
+            80% { clip: rect(10px, 9999px, 5px, 0); transform: translate(-3px, 0); }
+            100% { clip: rect(40px, 9999px, 30px, 0); transform: translate(2px, 0); }
+        }
+        
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(70px, 9999px, 60px, 0); transform: translate(2px, 0); }
+            20% { clip: rect(20px, 9999px, 10px, 0); transform: translate(-2px, 0); }
+            40% { clip: rect(50px, 9999px, 40px, 0); transform: translate(1px, 0); }
+            60% { clip: rect(10px, 9999px, 5px, 0); transform: translate(-1px, 0); }
+            80% { clip: rect(90px, 9999px, 80px, 0); transform: translate(3px, 0); }
+            100% { clip: rect(30px, 9999px, 20px, 0); transform: translate(-2px, 0); }
+        }
+        
+        .title-lines {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            left: 0;
+            overflow: hidden;
+        }
+        
+        .title-lines::before, .title-lines::after {
             content: '';
             position: absolute;
             width: 100%;
@@ -284,8 +451,8 @@
             animation: titleEnergy 2s ease-in-out infinite;
         }
         
-        .title::before { top: -10px; }
-        .title::after { bottom: -10px; }
+        .title-lines::before { top: -10px; }
+        .title-lines::after { bottom: -10px; }
         
         @keyframes titleEnergy {
             0%, 100% { opacity: 0.3; transform: scaleX(0.8); }
@@ -433,7 +600,7 @@
         }
         
         .tips-container {
-            margin-top: 30px;
+            margin-top: 25px;
             padding: 15px 25px;
             background: rgba(0, 200, 255, 0.05);
             border: 1px solid rgba(0, 200, 255, 0.2);
@@ -492,6 +659,29 @@
         
         .glitch { animation: glitch 5s infinite; }
         
+        /* ANIMACIÓN DE SALIDA */
+        .outro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0f;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        
+        .outro-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
         .complete-overlay {
             position: fixed;
             top: 0;
@@ -529,6 +719,15 @@
     </style>
 </head>
 <body>
+    <!-- ANIMACIÓN DE ENTRADA -->
+    <div class="intro-overlay" id="introOverlay">
+        <div class="intro-logo">LICEO RP</div>
+        <div class="intro-tagline">CARGANDO SERVIDOR...</div>
+        <div class="intro-loader">
+            <div class="intro-loader-bar"></div>
+        </div>
+    </div>
+
     <!-- Audio -->
     <audio id="bgMusic" loop>
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
@@ -550,49 +749,60 @@
     <div class="vignette"></div>
     <div class="scanlines"></div>
     
-    <div class="top-bar">
-        <div class="server-info">
-            <div class="server-version">v<span id="serverVersion">1.0.0</span></div>
-            <div class="player-count-top">👥 <span id="playerCount">--</span>/64</div>
+    <div class="main-content" id="mainContent">
+        <div class="top-bar">
+            <div class="server-info">
+                <div class="server-version">v<span id="serverVersion">1.0.0</span></div>
+                <div class="player-count-top">👥 <span id="playerCount">--</span>/64</div>
+            </div>
+            <div class="clock" id="clock">12:00:00 PM</div>
+            <button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵 Música</button>
         </div>
-        <div class="clock" id="clock">12:00:00 PM</div>
-        <button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵 Música</button>
+        
+        <div class="container">
+            <h1 class="title">LICEO RP<div class="title-lines"></div></h1>
+            <p class="subtitle">¡Diversión garantizada!</p>
+            
+            <div class="info-panel">
+                <p class="info-text">Discord: discord.gg/liceorp</p>
+                <p class="info-text">¡Respeta las normas para divertirte!</p>
+            </div>
+            
+            <div class="loading-stages">
+                <div class="stage" id="stage1"></div>
+                <div class="stage" id="stage2"></div>
+                <div class="stage" id="stage3"></div>
+                <div class="stage" id="stage4"></div>
+                <div class="stage" id="stage5"></div>
+            </div>
+            
+            <div class="percentage" id="percentage">0%</div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            
+            <p class="status">Cargando: <span id="statusText">Conectando...</span></p>
+            <p class="download-info" id="downloadInfo"></p>
+            
+            <div class="tips-container">
+                <p class="tips-label">💡 Consejos</p>
+                <p class="tips-text" id="tipsText">¡Únete a nuestro Discord para estar actualizado!</p>
+            </div>
+        </div>
+        
+        <div class="footer-info">
+            <div>© 2026 <span>LICEO RP</span></div>
+            <div>Powered by <span>SoyGreomar</span></div>
+        </div>
     </div>
     
-    <div class="container">
-        <h1 class="title glitch">LICEO RP</h1>
-        <p class="subtitle">¡Diversión garantizada!</p>
-        
-        <div class="info-panel">
-            <p class="info-text">Discord: discord.gg/liceorp</p>
-            <p class="info-text">¡Respeta las normas para divertirte!</p>
+    <!-- ANIMACIÓN DE SALIDA (IGUAL A LA DE ENTRADA) -->
+    <div class="outro-overlay" id="outroOverlay">
+        <div class="intro-logo">BIENVENIDO</div>
+        <div class="intro-tagline">DISFRUTA DEL SERVIDOR..</div>
+        <div class="intro-loader">
+            <div class="intro-loader-bar" style="width: 100%; animation: none;"></div>
         </div>
-        
-        <div class="loading-stages">
-            <div class="stage" id="stage1"></div>
-            <div class="stage" id="stage2"></div>
-            <div class="stage" id="stage3"></div>
-            <div class="stage" id="stage4"></div>
-            <div class="stage" id="stage5"></div>
-        </div>
-        
-        <div class="percentage" id="percentage">0%</div>
-        <div class="progress-container">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
-        
-        <p class="status">Cargando: <span id="statusText">Conectando...</span></p>
-        <p class="download-info" id="downloadInfo"></p>
-        
-        <div class="tips-container">
-            <p class="tips-label">💡 Consejos</p>
-            <p class="tips-text" id="tipsText">¡Únete a nuestro Discord para estar actualizado!</p>
-        </div>
-    </div>
-    
-    <div class="footer-info">
-        <div>© 2026 <span>LICEO RP</span></div>
-        <div>Powered by <span>SoyGreomar</span></div>
     </div>
     
     <div class="complete-overlay" id="completeOverlay">
@@ -600,9 +810,8 @@
     </div>
 
     <script>
-        // ====== CONFIGURACIÓN DE MÚSICA ======
+        // CONFIGURACIÓN DE MÚSICA
         const musicUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
-        // ======================================
         
         const tipsList = [
             "¡Únete a nuestro Discord para estar actualizado!",
@@ -615,17 +824,26 @@
             "¡Explora el mapa y descubre secretos!"
         ];
         
-        // Música - Reproducción automática
+        // ANIMACIÓN DE ENTRADA
+        function runIntroAnimation() {
+            setTimeout(() => {
+                document.getElementById('introOverlay').classList.add('hidden');
+                document.getElementById('mainContent').classList.add('visible');
+            }, 2000);
+        }
+        
+        runIntroAnimation();
+        
+        // Música
         const bgMusic = document.getElementById('bgMusic');
         bgMusic.src = musicUrl;
         bgMusic.volume = 0.3;
         
-        // Intentar reproducir automáticamente
         bgMusic.play().then(() => {
             document.getElementById('musicBtn').textContent = "⏸️ Pausa";
             document.getElementById('musicBtn').classList.add('playing');
         }).catch(e => {
-            console.log("Autoplay bloqueado - el usuario debe hacer click");
+            console.log("Autoplay bloqueado");
         });
         
         function toggleMusic() {
@@ -649,7 +867,7 @@
             const ampm = hours >= 12 ? 'PM' : 'AM';
             hours = hours % 12;
             hours = hours ? hours : 12;
-            document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
+            document.getElementById('clock').textContent = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
         }
         setInterval(updateClock, 1000);
         updateClock();
@@ -745,7 +963,8 @@
         }
         
         function showComplete() {
-            document.getElementById('completeOverlay').classList.add('show');
+            document.getElementById('mainContent').classList.remove('visible');
+            document.getElementById('outroOverlay').classList.add('show');
         }
         
         window.setProgress = function(progress) {
