@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LICEO RP - Cargando...</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #0a0a0f;
+            overflow: hidden;
+            font-family: 'Rajdhani', sans-serif;
+            color: white;
+        }
+        
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, #1a1a3a 0%, #0a0a0f 70%);
+            z-index: -3;
+        }
+        
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 200, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 200, 0, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            z-index: -2;
+        }
+        
+        @keyframes gridMove {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+        }
+        
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.1) 0px, rgba(0, 0, 0, 0.1) 1px, transparent 1px, transparent 3px);
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0.3;
+        }
+        
+        .shooting-star {
+            position: absolute;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, #ffc800, transparent);
+            opacity: 0;
+            animation: shootingStar 3s infinite;
+        }
+        
+        @keyframes shootingStar {
+            0% { transform: translateX(-100px) translateY(0); opacity: 0; }
+            10% { opacity: 1; }
+            30% { transform: translateX(calc(100vw + 100px)) translateY(100px); opacity: 0; }
+            100% { opacity: 0; }
+        }
+        
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 8s infinite ease-in-out;
+        }
+        
+        .particle::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200%;
+            height: 200%;
+            border-radius: 50%;
+            background: inherit;
+            filter: blur(8px);
+            opacity: 0.5;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+        
+        .geo-shape {
+            position: absolute;
+            opacity: 0.15;
+            animation: floatGeo 15s infinite linear;
+        }
+        
+        .geo-triangle {
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 25px solid #ffc800;
+        }
+        
+        .geo-square {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #00c8ff;
+            transform: rotate(45deg);
+        }
+        
+        .geo-circle {
+            width: 15px;
+            height: 15px;
+            border: 2px solid #00ffc8;
+            border-radius: 50%;
+        }
+        
+        @keyframes floatGeo {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.15; }
+            90% { opacity: 0.15; }
+            100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+        }
+        
+        .corner-frame {
+            position: fixed;
+            width: 100px;
+            height: 100px;
+            border: 2px solid rgba(255, 200, 0, 0.4);
+            z-index: 2;
+        }
+        
+        .corner-tl { top: 20px; left: 20px; border-right: none; border-bottom: none; animation: cornerPulse 3s ease-in-out infinite; }
+        .corner-tr { top: 20px; right: 20px; border-left: none; border-bottom: none; animation: cornerPulse 3s ease-in-out infinite 0.5s; }
+        .corner-bl { bottom: 20px; left: 20px; border-right: none; border-top: none; animation: cornerPulse 3s ease-in-out infinite 1s; }
+        .corner-br { bottom: 20px; right: 20px; border-left: none; border-top: none; animation: cornerPulse 3s ease-in-out infinite 1.5s; }
+        
+        @keyframes cornerPulse {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        
+        .lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .line {
+            position: absolute;
+            background: linear-gradient(to bottom, transparent, rgba(255, 200, 0, 0.1), transparent);
+            width: 1px;
+            height: 100%;
+        }
+        
+        .line-left { left: 50px; }
+        .line-right { right: 50px; }
+        
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            z-index: 10;
+            background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, transparent 100%);
+        }
+        
+        .server-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 12px;
+            letter-spacing: 1px;
+            min-width: 150px;
+        }
+        
+        .server-version { color: #666; }
+        .server-version span { color: #ffc800; }
+        
+        .player-count-top { color: #666; }
+        .player-count-top span { color: #00ffc8; font-weight: 700; }
+        
+        .music-btn {
+            background: rgba(255, 200, 0, 0.1);
+            border: 1px solid rgba(255, 200, 0, 0.3);
+            color: #ffc800;
+            padding: 5px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .music-btn:hover {
+            background: rgba(255, 200, 0, 0.2);
+            box-shadow: 0 0 10px rgba(255, 200, 0, 0.3);
+        }
+        
+        .music-btn.playing {
+            animation: musicPulse 1s infinite;
+        }
+        
+        @keyframes musicPulse {
+            0%, 100% { box-shadow: 0 0 5px rgba(255, 200, 0, 0.3); }
+            50% { box-shadow: 0 0 15px rgba(255, 200, 0, 0.6); }
+        }
+        
+        .clock {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            color: #00c8ff;
+            letter-spacing: 2px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            z-index: 10;
+            position: relative;
+        }
+        
+        .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 48px;
+            font-weight: 900;
+            color: #ffc800;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #ffc800, 0 0 20px #ffc800, 0 0 40px #ffc800, 0 0 80px #ffc800;
+            position: relative;
+        }
+        
+        .title::before, .title::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            left: 0;
+            background: linear-gradient(90deg, transparent, #ffc800, transparent);
+            animation: titleEnergy 2s ease-in-out infinite;
+        }
+        
+        .title::before { top: -10px; }
+        .title::after { bottom: -10px; }
+        
+        @keyframes titleEnergy {
+            0%, 100% { opacity: 0.3; transform: scaleX(0.8); }
+            50% { opacity: 1; transform: scaleX(1); }
+        }
+        
+        .subtitle {
+            font-size: 24px;
+            font-weight: 300;
+            color: #aaa;
+            letter-spacing: 4px;
+            margin-bottom: 40px;
+        }
+        
+        .info-panel {
+            background: rgba(20, 20, 30, 0.95);
+            border: 1px solid rgba(255, 200, 0, 0.8);
+            padding: 20px 40px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .info-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 200, 0, 0.3), transparent);
+            animation: borderGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes borderGlow {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .info-text {
+            font-size: 16px;
+            color: #00c8ff;
+            margin: 8px 0;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .info-text:first-child { color: #ffc800; font-weight: 700; }
+        
+        .loading-stages {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .stage {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 200, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .stage.active { background: #ffc800; box-shadow: 0 0 10px #ffc800; }
+        .stage.completed { background: #00ffc8; border-color: #00ffc8; }
+        
+        .percentage {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: #ffc800;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(255, 200, 0, 0.5);
+        }
+        
+        .progress-container {
+            width: 400px;
+            max-width: 80%;
+            height: 12px;
+            background: rgba(30, 30, 40, 0.8);
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 200, 0, 0.3);
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ffc800, #ffaa00, #ffc800);
+            background-size: 200% 100%;
+            border-radius: 6px;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 15px #ffc800;
+            animation: progressShine 2s linear infinite;
+            position: relative;
+        }
+        
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #fff, 0 0 20px #ffc800;
+            animation: ledPulse 0.5s ease-in-out infinite;
+        }
+        
+        @keyframes ledPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        @keyframes progressShine {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        .status {
+            font-size: 14px;
+            color: #666;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        
+        .status span { color: #00c8ff; text-shadow: 0 0 10px rgba(0, 200, 255, 0.5); }
+        
+        .download-info {
+            font-size: 12px;
+            color: #555;
+            margin-top: 10px;
+            max-width: 400px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .tips-container {
+            margin-top: 30px;
+            padding: 15px 25px;
+            background: rgba(0, 200, 255, 0.05);
+            border: 1px solid rgba(0, 200, 255, 0.2);
+            border-radius: 8px;
+            max-width: 500px;
+        }
+        
+        .tips-label {
+            font-size: 10px;
+            color: #00c8ff;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        
+        .tips-text {
+            font-size: 14px;
+            color: #aaa;
+            font-style: italic;
+            transition: opacity 0.5s ease;
+        }
+        
+        .footer-info {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 30px;
+            font-size: 11px;
+            color: #444;
+            letter-spacing: 1px;
+            z-index: 10;
+        }
+        
+        .footer-info span { color: #666; }
+        
+        .vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.6) 100%);
+            z-index: 5;
+        }
+        
+        @keyframes glitch {
+            0%, 90%, 100% { transform: translate(0); }
+            92% { transform: translate(-2px, 1px); }
+            94% { transform: translate(2px, -1px); }
+            96% { transform: translate(-1px, -1px); }
+            98% { transform: translate(1px, 1px); }
+        }
+        
+        .glitch { animation: glitch 5s infinite; }
+        
+        .complete-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        
+        .complete-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .complete-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 36px;
+            color: #00ffc8;
+            text-shadow: 0 0 20px #00ffc8;
+            animation: pulse 1s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Audio -->
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="background"></div>
+    <div class="grid-bg"></div>
+    <div class="particles" id="particles"></div>
+    <div class="geo-shapes" id="geoShapes"></div>
+    <div class="shooting-stars" id="shootingStars"></div>
+    <div class="lines">
+        <div class="line line-left"></div>
+        <div class="line line-right"></div>
+    </div>
+    <div class="corner-frame corner-tl"></div>
+    <div class="corner-frame corner-tr"></div>
+    <div class="corner-frame corner-bl"></div>
+    <div class="corner-frame corner-br"></div>
+    <div class="vignette"></div>
+    <div class="scanlines"></div>
+    
+    <div class="top-bar">
+        <div class="server-info">
+            <div class="server-version">v<span id="serverVersion">1.0.0</span></div>
+            <div class="player-count-top">👥 <span id="playerCount">--</span>/64</div>
+        </div>
+        <div class="clock" id="clock">12:00:00 PM</div>
+        <button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵 Música</button>
+    </div>
+    
+    <div class="container">
+        <h1 class="title glitch">LICEO RP</h1>
+        <p class="subtitle">¡Diversión garantizada!</p>
+        
+        <div class="info-panel">
+            <p class="info-text">Discord: discord.gg/liceorp</p>
+            <p class="info-text">¡Respeta las normas para divertirte!</p>
+        </div>
+        
+        <div class="loading-stages">
+            <div class="stage" id="stage1"></div>
+            <div class="stage" id="stage2"></div>
+            <div class="stage" id="stage3"></div>
+            <div class="stage" id="stage4"></div>
+            <div class="stage" id="stage5"></div>
+        </div>
+        
+        <div class="percentage" id="percentage">0%</div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <p class="status">Cargando: <span id="statusText">Conectando...</span></p>
+        <p class="download-info" id="downloadInfo"></p>
+        
+        <div class="tips-container">
+            <p class="tips-label">💡 Consejos</p>
+            <p class="tips-text" id="tipsText">¡Únete a nuestro Discord para estar actualizado!</p>
+        </div>
+    </div>
+    
+    <div class="footer-info">
+        <div>© 2026 <span>LICEO RP</span></div>
+        <div>Powered by <span>SoyGreomar</span></div>
+    </div>
+    
+    <div class="complete-overlay" id="completeOverlay">
+        <div class="complete-text">¡BIENVENIDO!</div>
+    </div>
+
+    <script>
+        // ====== CONFIGURACIÓN DE MÚSICA ======
+        const musicUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+        // ======================================
+        
+        const tipsList = [
+            "¡Únete a nuestro Discord para estar actualizado!",
+            "Recuerda leer las reglas del servidor",
+            "¡Participa en eventos exclusivos!",
+            "¡Convértete en VIP y disfruta de beneficios!",
+            "Trabaja duro y crea tu imperio criminal",
+            "¡No olvides visitar nuestra tienda!",
+            "Coopera con otros jugadores para mejores resultados",
+            "¡Explora el mapa y descubre secretos!"
+        ];
+        
+        // Música - Reproducción automática
+        const bgMusic = document.getElementById('bgMusic');
+        bgMusic.src = musicUrl;
+        bgMusic.volume = 0.3;
+        
+        // Intentar reproducir automáticamente
+        bgMusic.play().then(() => {
+            document.getElementById('musicBtn').textContent = "⏸️ Pausa";
+            document.getElementById('musicBtn').classList.add('playing');
+        }).catch(e => {
+            console.log("Autoplay bloqueado - el usuario debe hacer click");
+        });
+        
+        function toggleMusic() {
+            const btn = document.getElementById('musicBtn');
+            if (bgMusic.paused) {
+                bgMusic.play();
+                btn.textContent = "⏸️ Pausa";
+                btn.classList.add('playing');
+            } else {
+                bgMusic.pause();
+                btn.textContent = "🎵 Música";
+                btn.classList.remove('playing');
+            }
+        }
+        
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+        
+        let currentTip = 0;
+        setInterval(() => {
+            const tipElement = document.getElementById('tipsText');
+            tipElement.style.opacity = 0;
+            setTimeout(() => {
+                currentTip = (currentTip + 1) % tipsList.length;
+                tipElement.textContent = tipsList[currentTip];
+                tipElement.style.opacity = 1;
+            }, 500);
+        }, 5000);
+        
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const colors = ['#ffc800', '#00c8ff', '#00ffc8', '#ff6b6b', '#c56cf0'];
+            
+            for (let i = 0; i < 60; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.width = (Math.random() * 4 + 2) + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                container.appendChild(particle);
+            }
+        }
+        
+        function createGeoShapes() {
+            const container = document.getElementById('geoShapes');
+            
+            for (let i = 0; i < 5; i++) {
+                const triangle = document.createElement('div');
+                triangle.className = 'geo-shape geo-triangle';
+                triangle.style.left = Math.random() * 100 + '%';
+                triangle.style.animationDelay = Math.random() * 15 + 's';
+                container.appendChild(triangle);
+            }
+            
+            for (let i = 0; i < 5; i++) {
+                const square = document.createElement('div');
+                square.className = 'geo-shape geo-square';
+                square.style.left = Math.random() * 100 + '%';
+                square.style.animationDelay = Math.random() * 15 + 's';
+                container.appendChild(square);
+            }
+            
+            for (let i = 0; i < 5; i++) {
+                const circle = document.createElement('div');
+                circle.className = 'geo-shape geo-circle';
+                circle.style.left = Math.random() * 100 + '%';
+                circle.style.animationDelay = Math.random() * 15 + 's';
+                container.appendChild(circle);
+            }
+        }
+        
+        function createShootingStars() {
+            const container = document.getElementById('shootingStars');
+            
+            for (let i = 0; i < 3; i++) {
+                const star = document.createElement('div');
+                star.className = 'shooting-star';
+                star.style.top = (Math.random() * 50) + '%';
+                star.style.left = (Math.random() * 30) + '%';
+                star.style.animationDelay = (Math.random() * 5) + 's';
+                star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                container.appendChild(star);
+            }
+        }
+        
+        createParticles();
+        createGeoShapes();
+        createShootingStars();
+        
+        function updateStages(progress) {
+            const stages = 5;
+            const activeStage = Math.floor((progress / 100) * stages) + 1;
+            
+            for (let i = 1; i <= stages; i++) {
+                const stageEl = document.getElementById('stage' + i);
+                if (i < activeStage) {
+                    stageEl.className = 'stage completed';
+                } else if (i === activeStage) {
+                    stageEl.className = 'stage active';
+                } else {
+                    stageEl.className = 'stage';
+                }
+            }
+        }
+        
+        function showComplete() {
+            document.getElementById('completeOverlay').classList.add('show');
+        }
+        
+        window.setProgress = function(progress) {
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('percentage').textContent = Math.floor(progress) + '%';
+            updateStages(progress);
+            
+            if (progress >= 100) {
+                setTimeout(showComplete, 500);
+            }
+        };
+        
+        window.setStatus = function(status) {
+            document.getElementById('statusText').textContent = status;
+        };
+        
+        window.setDescription = function(description) {
+            document.getElementById('downloadInfo').textContent = description;
+        };
+        
+        window.setDownloadInfo = function(info) {
+            document.getElementById('downloadInfo').textContent = info;
+        };
+        
+        window.setPlayerCount = function(count) {
+            document.getElementById('playerCount').textContent = count;
+        };
+        
+        window.setServerVersion = function(version) {
+            document.getElementById('serverVersion').textContent = version;
+        };
+        
+        window.SetLoadingProgress = function(progress, status, info) {
+            if (progress !== undefined) window.setProgress(progress);
+            if (status !== undefined) window.setStatus(status);
+            if (info !== undefined) window.setDownloadInfo(info);
+        };
+        
+        (function() {
+            if (typeof gmod !== 'undefined' && typeof gmod !== 'object') return;
+            if (window.gmod !== undefined && window.gmod.loadingHTML !== undefined) return;
+            
+            let demoProgress = 0;
+            const demoStatus = [
+                'Conectando al servidor...',
+                'Descargando archivos...',
+                'Preparando contenido...',
+                'Cargando recursos...',
+                'Inicializando mundo...',
+                '¡Listo para jugar!'
+            ];
+            
+            window.demoInterval = setInterval(function() {
+                if (demoProgress < 100) {
+                    demoProgress += Math.random() * 4;
+                    if (demoProgress > 100) demoProgress = 100;
+                    
+                    const statusIndex = Math.min(Math.floor(demoProgress / 17), demoStatus.length - 1);
+                    window.setProgress(demoProgress);
+                    window.setStatus(demoStatus[statusIndex]);
+                } else {
+                    clearInterval(window.demoInterval);
+                }
+            }, 400);
+            
+            setInterval(() => {
+                if (Math.random() > 0.5) {
+                    const players = Math.floor(Math.random() * 30) + 20;
+                    window.setPlayerCount(players);
+                }
+            }, 2000);
+        })();
+    </script>
+</body>
+</html>
